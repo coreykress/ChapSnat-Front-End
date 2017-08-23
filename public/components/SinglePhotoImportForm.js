@@ -7,32 +7,20 @@ class SinglePhotoImportForm extends React.Component {
         super(props);
         this.state = {value: ''};
 
+        this.data = new FormData;
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(event) {
-                let data = new FormData;
-                data.append('file', event.target.files[0]);
-
-                axios.post('http://localhost:3000/new', data)
-                .then((response) => {
-                    console.log(response);
-                })
-                .catch (function (error) {
-                    console.log(error);
-                });
-        // this.setState({value: event.target.value});
+        let file = event.target.files[0];
+        this.state.value = file.name;
+        console.log(file.name);
+        this.data.append('file', file);
     }
 
     handleSubmit(event) {
-        // alert(this.state.value);
-        // event.preventDefault();
-
-        let data = new FormData;
-        data.append('file', event.target.files[0]);
-
-        axios.post('http://localhost:3000/new', data, {"Access-Control-Allow-Origin": "*"})
+        axios.post('http://localhost:3000/new', this.data)
         .then((response) => {
             console.log(response);
         })
@@ -46,7 +34,7 @@ class SinglePhotoImportForm extends React.Component {
             <form onSubmit={this.handleSubmit}>
                 <label>
                     Photo:
-                    <input type="file" value={this.state.value} onChange={this.handleChange} />
+                    <input type="file" onChange={this.handleChange} />
                 </label>
                 <input type="submit" value="Submit" />
             </form>
